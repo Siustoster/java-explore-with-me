@@ -9,11 +9,13 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>ru.practicum.explorewme</groupId>
     <artifactId>stat</artifactId>
+    <version>0.0.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>stat-dto</module>
+        <module>stat-server</module>
+        <module>stat-client</module>
     </modules>
 
     <properties>

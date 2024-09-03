@@ -2,6 +2,7 @@ package ru.practicum.explorewme.statserver.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,5 +19,5 @@ public class Hit {
     private String app;
     private String uri;
     private String ip;
-    private LocalDateTime timestamp;
+    private LocalDateTime created;
 }
