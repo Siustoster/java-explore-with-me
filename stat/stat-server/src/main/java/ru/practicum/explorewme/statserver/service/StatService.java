@@ -24,11 +24,11 @@ public class StatService {
 
     public List<StatDto> getStat(LocalDateTime start, LocalDateTime end, Boolean uniq, List<String> uri) {
         if (uniq)
-            if (uri.isEmpty())
+            if (uri == null || uri.isEmpty())
                 return repository.getUniqueStatWOUri(start, end);
             else
                 return repository.getUniqueStatWUri(uri, start, end);
-        else if (uri.isEmpty())
+        else if (uri == null || uri.isEmpty())
             return repository.getHitsStatWOUri(start, end);
         else
             return repository.getHitsStatWUri(uri, start, end);
