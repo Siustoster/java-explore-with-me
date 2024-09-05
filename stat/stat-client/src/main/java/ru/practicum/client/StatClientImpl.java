@@ -45,9 +45,9 @@ public class StatClientImpl implements StatClient {
                                  List<String> uri,
                                  Boolean unique) {
         log.info("get stat");
-        List<StatDto> outDto = Arrays.stream(WebClient.create(statUrl).get().
-                uri(uriBuilder -> uriBuilder.
-                        path("/stats")
+        List<StatDto> outDto = Arrays.stream(WebClient.create(statUrl).get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/stats")
                         .queryParam("start", start)
                         .queryParam("end", end)
                         .queryParam("uris", uri)
