@@ -1,23 +1,20 @@
 package ru.practicum.client;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
+import reactor.core.publisher.Mono;
 import ru.practicum.explorewme.HitRequestDto;
+import ru.practicum.explorewme.StatDto;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -26,30 +23,41 @@ import java.util.Objects;
 public class StatClientImpl implements StatClient {
     @Value("${stats.server.url}")
     private String statUrl;
-    WebClient client = WebClient.create(statUrl);
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
     @Override
-    public String saveStat(ServerHttpRequest request, String appName) {
-       // WebClient client = WebClient.create(statUrl);
-        log.info(statUrl);
-        WebClient.UriSpec<RequestBodySpec> uriSpec = client.method(HttpMethod.POST);
-        //URI uri = URI.create(statUrl+"/hit")
-        RequestBodySpec bodySpec = uriSpec.uri(URI.create(statUrl+"/hit"));
+    public void saveStat(ServerHttpRequest request, String appName) {
 
         HitRequestDto hit = new HitRequestDto(appName, request.getURI().getRawPath(),
                 Objects.requireNonNull(request.getRemoteAddress()).toString(), LocalDateTime.now().format(formatter));
 
-        WebClient.RequestHeadersSpec<?> headersSpec = bodySpec.body(BodyInserters.fromValue(hit));
+        String resp = WebClient.create().post().uri(statUrl + "/hit").contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(hit), HitRequestDto.class)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+    }
 
-        WebClient.ResponseSpec responseSpec = headersSpec.header(
-                        HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML)
-                .acceptCharset(StandardCharsets.UTF_8)
-                .retrieve();
-
-        return responseSpec.toString();
+    @Override
+    public List<StatDto> getStat(String start,
+                                 String end,
+                                 List<String> uri,
+                                 Boolean unique) {
+        log.info("get stat");
+        List<StatDto> outDto = Arrays.stream(WebClient.create(statUrl).get().
+                uri(uriBuilder -> uriBuilder.
+                        path("/stats")
+                        .queryParam("start", start)
+                        .queryParam("end", end)
+                        .queryParam("uris", uri)
+                        .queryParam("unique", unique)
+                        .build()
+                )
+                .retrieve()
+                .bodyToMono(StatDto[].class)
+                .block()).toList();
+        return outDto;
     }
 }
 
