@@ -25,7 +25,6 @@ public class StatClientImpl implements StatClient {
     private String statUrl;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-
     @Override
     public void saveStat(ServerHttpRequest request, String appName) {
 
