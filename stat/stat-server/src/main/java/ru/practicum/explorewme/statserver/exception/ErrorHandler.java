@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestControllerAdvice("ru.practicum.explorewme.statserver")
 public class ErrorHandler {
@@ -28,7 +27,7 @@ public class ErrorHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public Map<String, String> handleIternalServerError(Exception exception) {
-        return Map.of("error", exception.getMessage());
+    public ErrorResponse handleInternalServerError(Exception exception) {
+        return new ErrorResponse("Error", exception.getMessage());
     }
 }
