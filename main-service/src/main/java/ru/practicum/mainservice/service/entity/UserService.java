@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+
     @Transactional
     public UserDto save(UserDto userDto) {
         if ((userDto.getName() == null) || (userDto.getName().isBlank()) || userDto.getEmail() == null

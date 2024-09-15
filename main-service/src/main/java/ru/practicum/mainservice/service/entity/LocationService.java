@@ -12,7 +12,9 @@ import ru.practicum.mainservice.repository.LocationRepository;
 public class LocationService {
     private final LocationRepository locationRepository;
 
-    /** Вызывается методами EventService, к которым уже применяется Transactional */
+    /**
+     * Вызывается методами EventService, к которым уже применяется Transactional
+     */
     public Location saveLocation(Location location) {
         return locationRepository.save(location);
     }

@@ -27,7 +27,9 @@ import java.util.List;
 public class PublicController {
     private final PublicService publicService;
 
-    /** Подборки событий */
+    /**
+     * Подборки событий
+     */
 
     @GetMapping("/compilations")
     public List<CompilationDto> getCompilations(
@@ -42,7 +44,9 @@ public class PublicController {
         return publicService.getCompilationById(compId);
     }
 
-    /** Категории */
+    /**
+     * Категории
+     */
 
     @GetMapping("/categories")
     public List<CategoryDto> getCategories(@RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
@@ -55,7 +59,9 @@ public class PublicController {
         return publicService.getCategoryById(catId);
     }
 
-    /** События */
+    /**
+     * События
+     */
 
     @GetMapping("/events")
     public List<EventShortDto> getEventsWithFiltering(@RequestParam(required = false) String text,

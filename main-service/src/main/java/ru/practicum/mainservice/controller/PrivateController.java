@@ -25,7 +25,9 @@ import java.util.List;
 public class PrivateController {
     private final PrivateService privateService;
 
-    /** События */
+    /**
+     * События
+     */
 
     @GetMapping("/events")
     public List<EventShortDto> getUserEvents(@PathVariable @Positive Integer userId,
@@ -77,7 +79,9 @@ public class PrivateController {
         return privateService.updateRequestsStatus(userId, eventId, eventRequestStatusUpdateRequest);
     }
 
-    /** Запросы на участие */
+    /**
+     * Запросы на участие
+     */
 
     @GetMapping("/requests")
     public List<ParticipationRequestDto> getUserRequests(@PathVariable @Positive Integer userId) {

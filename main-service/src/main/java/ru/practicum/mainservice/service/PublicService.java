@@ -27,7 +27,9 @@ public class PublicService {
     private final CategoryService categoryService;
     private final CompilationService compilationService;
 
-    /** Подборки событий */
+    /**
+     * Подборки событий
+     */
 
     @Transactional(readOnly = true)
     public List<CompilationDto> getCompilations(Boolean pinned, int from, int size) {
@@ -39,7 +41,9 @@ public class PublicService {
         return CompilationMapper.toCompilationDto(compilationService.getCompilation(compId));
     }
 
-    /** Категории */
+    /**
+     * Категории
+     */
 
     @Transactional(readOnly = true)
     public List<CategoryDto> getCategories(int from, int size) {
@@ -51,7 +55,9 @@ public class PublicService {
         return CategoryMapper.toCategoryDto(categoryService.getCategory(catId));
     }
 
-    /** События */
+    /**
+     * События
+     */
 
     @Transactional(readOnly = true)
     public List<EventShortDto> getEventsWithFiltering(SearchParametersUsersPublic searchParametersUsersPublic,

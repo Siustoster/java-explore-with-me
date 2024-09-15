@@ -36,7 +36,9 @@ public class AdminService {
     private final EventService eventService;
     private final CompilationService compilationService;
 
-    /** Категории */
+    /**
+     * Категории
+     */
 
     @Transactional
     public CategoryDto saveCategory(CategoryDto categoryDto) {
@@ -53,7 +55,9 @@ public class AdminService {
         return categoryService.update(catId, categoryDto);
     }
 
-    /** События */
+    /**
+     * События
+     */
 
     @Transactional(readOnly = true)
     public List<EventFullDto> getEventsWithFilteringForAdmin(SearchParametersAdmin searchParametersAdmin,
@@ -70,7 +74,9 @@ public class AdminService {
         return eventService.updateByAdmin(eventId, updateEventRequest, category);
     }
 
-    /** Пользователи */
+    /**
+     * Пользователи
+     */
 
     @Transactional(readOnly = true)
     public List<UserDto> getUsers(List<Integer> ids, int from, int size) {
@@ -87,7 +93,9 @@ public class AdminService {
         userService.deleteUser(userId);
     }
 
-    /** Подборки событий */
+    /**
+     * Подборки событий
+     */
 
     @Transactional
     public CompilationDto saveCompilation(NewCompilationDto newCompilationDto) {

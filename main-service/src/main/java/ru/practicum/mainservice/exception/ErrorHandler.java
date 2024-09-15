@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.MissingRequestValueException;
 
 import java.util.NoSuchElementException;
 
@@ -16,67 +17,74 @@ import java.util.NoSuchElementException;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgumentException(final IllegalArgumentException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(MissingRequestValueException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(final MissingRequestValueException e) {
+        log.info(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler(BadRequestValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestValidationException(final BadRequestValidationException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ConflictValidationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictValidationException(final ConflictValidationException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.CONFLICT, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleDataIntegrityViolationException(final DataIntegrityViolationException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.CONFLICT, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
         log.info("ошибка валидации", e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNoSuchElementException(final NoSuchElementException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleConstraintViolationException(final ConstraintViolationException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleEntityNotFoundException(final EntityNotFoundException e) {
         log.info(e.getMessage(), e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Exception e) {
         log.info("ошибка приложения", e);
-        return new ErrorResponse(e.getMessage());
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
 }

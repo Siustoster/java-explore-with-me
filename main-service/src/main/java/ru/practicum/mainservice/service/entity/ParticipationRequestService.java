@@ -71,6 +71,6 @@ public class ParticipationRequestService {
 
     @Transactional(readOnly = true)
     public ParticipationRequest getRequestByEventAndRequester(int eventId, int requesterId) {
-        return participationRequestRepository.findOneByEvent_IdAndRequester_Id(eventId,requesterId);
+        return participationRequestRepository.findOneByEvent_IdAndRequester_Id(eventId, requesterId);
     }
 }
