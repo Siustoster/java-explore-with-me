@@ -1,5 +1,6 @@
 package ru.practicum.client;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,10 +27,7 @@ public class StatClientImpl implements StatClient {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public void saveStat(ServerHttpRequest request, String appName) {
-
-        HitRequestDto hit = new HitRequestDto(appName, request.getURI().getRawPath(),
-                Objects.requireNonNull(request.getRemoteAddress()).toString(), LocalDateTime.now().format(formatter));
+    public void saveStat(HitRequestDto hit) {
 
         String resp = WebClient.create().post().uri(statUrl + "/hit").contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(hit), HitRequestDto.class)

@@ -9,6 +9,10 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
+    environment:
+    - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats_db
+    - POSTGRES_USER=admin
+    - POSTGRES_PASSWORD=admin
 
   stats-db:
     image: postgres:14-alpine
@@ -28,8 +32,20 @@ services:
       - "8080:8080"
     environment:
       - STATS_SERVER_URL=http://stats-server:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_db
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=admin
     depends_on:
       - stats-db
+      - ewm-db
   ewm-db:
-    image: postgres:16.1
+    image: postgres:14-alpine
+    container_name: ewm-db
+    ports:
+      - "6542:5432"
+    environment:
+      - POSTGRES_DB=ewm_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+
 
