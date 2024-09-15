@@ -2,8 +2,8 @@ package ru.practicum.mainservice.model.event.dto;
 
 import lombok.*;
 
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor

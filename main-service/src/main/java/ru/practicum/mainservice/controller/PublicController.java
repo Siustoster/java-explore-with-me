@@ -1,6 +1,6 @@
 package ru.practicum.mainservice.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,9 +14,10 @@ import ru.practicum.mainservice.searchparams.PresentationParameters;
 import ru.practicum.mainservice.searchparams.SearchParametersUsersPublic;
 import ru.practicum.mainservice.service.PublicService;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class PublicController {
                                                       @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                       @RequestParam(required = false) SortType sort,
                                                       @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                      @RequestParam(defaultValue = "10") @Positive Integer size, HttpServletRequest servletRequest) {
+                                                      @RequestParam(defaultValue = "10") @Positive Integer size, ServerHttpRequest servletRequest) {
 
         SearchParametersUsersPublic searchParametersUsersPublic = new SearchParametersUsersPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
         PresentationParameters presentationParameters = new PresentationParameters(sort, from, size);
@@ -81,7 +82,7 @@ public class PublicController {
 
     @GetMapping("/events/{id}")
     public EventFullDto getEventForPublic(@PathVariable @Positive Integer id,
-                                          HttpServletRequest servletRequest) {
+                                          ServerHttpRequest servletRequest) {
 
         return publicService.getEventForPublic(id, servletRequest);
     }

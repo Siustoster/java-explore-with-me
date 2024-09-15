@@ -1,14 +1,13 @@
 package ru.practicum.mainservice.service.entity;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatClient;
@@ -207,13 +206,14 @@ public class EventService {
     @Transactional(readOnly = true)
     public List<EventShortDto> getEventsWithFilteringForPublic(SearchParametersUsersPublic searchParametersUsersPublic,
                                                                PresentationParameters presentationParameters,
-                                                               HttpServletRequest servletRequest) {
+                                                               ServerHttpRequest servletRequest) {
+        log.info("вызываем клиент статистики");
         statsServerClient2.saveStat(new HitRequestDto(
                 "emw-main-service",
                 "/events",
-                servletRequest.getRemoteAddr(),
+                servletRequest.getRemoteAddress().toString(),
                 LocalDateTime.now().format(Constants.DATE_TIME_FORMAT)));
-
+        log.info("вызвали клиент статистики");
         Pageable pageable = PageRequest.of(presentationParameters.getFrom() / presentationParameters.getSize(),
                 presentationParameters.getSize());
         String text = null;
@@ -269,7 +269,7 @@ public class EventService {
     }
 
     @Transactional(readOnly = true)
-    public EventFullDto getEventForPublic(int id, HttpServletRequest servletRequest) {
+    public EventFullDto getEventForPublic(int id, ServerHttpRequest servletRequest) {
         Event event = getEvent(id);
         if (event.getState() != EventState.PUBLISHED) {
             throw new NoSuchElementException("Событие с id " + id + " не опубликовано");
@@ -285,7 +285,7 @@ public class EventService {
         statsServerClient2.saveStat(new HitRequestDto(
                 "emw-main-service",
                 "/events/" + id,
-                servletRequest.getRemoteAddr(),
+                servletRequest.getRemoteAddress().toString(),
                 LocalDateTime.now().format(Constants.DATE_TIME_FORMAT)));
         return eventFullDto;
     }

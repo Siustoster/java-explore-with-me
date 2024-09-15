@@ -13,9 +13,10 @@ import ru.practicum.mainservice.model.request.dto.EventRequestStatusUpdateResult
 import ru.practicum.mainservice.model.request.dto.ParticipationRequestDto;
 import ru.practicum.mainservice.service.PrivateService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.List;
 
 @RestController

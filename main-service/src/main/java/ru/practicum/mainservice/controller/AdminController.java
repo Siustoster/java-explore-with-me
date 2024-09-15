@@ -16,9 +16,10 @@ import ru.practicum.mainservice.searchparams.PresentationParameters;
 import ru.practicum.mainservice.searchparams.SearchParametersAdmin;
 import ru.practicum.mainservice.service.AdminService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
