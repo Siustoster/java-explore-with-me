@@ -9,7 +9,7 @@ public class ParticipationRequestMapper {
         return new ParticipationRequestDto(
                 participationRequest.getId(),
                 participationRequest.getRequester().getId(),
-                participationRequest.getCreated().toString(),
+                participationRequest.getCreated().toString().substring(0, 24),
                 participationRequest.getEvent().getId(),
                 participationRequest.getStatus().toString()
         );
