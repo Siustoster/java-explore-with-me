@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.BadRequestValidationException;
+import ru.practicum.mainservice.exception.ConflictValidationException;
 import ru.practicum.mainservice.mappers.CategoryMapper;
 import ru.practicum.mainservice.model.category.Category;
 import ru.practicum.mainservice.model.category.dto.CategoryDto;
@@ -26,6 +27,9 @@ public class CategoryService {
         if ((categoryDto.getName() == null) || (categoryDto.getName().isBlank())) {
             throw new BadRequestValidationException("Переданы некорректные данные для создания категории");
         }
+        if (!categoryRepository.findCategoriesByName(categoryDto.getName()).isEmpty()) {
+            throw new ConflictValidationException("Категория с таким именем уже существует");
+        }
         return CategoryMapper.toCategoryDto(categoryRepository.save(CategoryMapper.toCategory(categoryDto)));
     }
 
@@ -38,6 +42,8 @@ public class CategoryService {
         if (updatingCategory.getName().equals(categoryDto.getName())) {
             categoryDto.setId(updatingCategory.getId());
             return categoryDto;
+        } else if (!categoryRepository.findCategoriesByName(categoryDto.getName()).isEmpty()) {
+            throw new ConflictValidationException("Категория с таким именем уже существует");
         }
         updatingCategory.setName(categoryDto.getName());
         return CategoryMapper.toCategoryDto(categoryRepository.save(updatingCategory));

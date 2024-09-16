@@ -1,8 +1,8 @@
 package ru.practicum.mainservice.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.mappers.CategoryMapper;
@@ -62,13 +62,13 @@ public class PublicService {
     @Transactional(readOnly = true)
     public List<EventShortDto> getEventsWithFiltering(SearchParametersUsersPublic searchParametersUsersPublic,
                                                       PresentationParameters presentationParameters,
-                                                      ServerHttpRequest servletRequest) {
+                                                      HttpServletRequest servletRequest) {
         log.info("вызываем сервис сущности событий");
         return eventService.getEventsWithFilteringForPublic(searchParametersUsersPublic, presentationParameters, servletRequest);
     }
 
     @Transactional(readOnly = true)
-    public EventFullDto getEventForPublic(int id, ServerHttpRequest servletRequest) {
+    public EventFullDto getEventForPublic(int id, HttpServletRequest servletRequest) {
         return eventService.getEventForPublic(id, servletRequest);
     }
 }

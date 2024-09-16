@@ -1,6 +1,6 @@
 package ru.practicum.mainservice.controller;
 
-import org.springframework.http.server.reactive.ServerHttpRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,7 +14,6 @@ import ru.practicum.mainservice.searchparams.PresentationParameters;
 import ru.practicum.mainservice.searchparams.SearchParametersUsersPublic;
 import ru.practicum.mainservice.service.PublicService;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 
@@ -34,7 +33,7 @@ public class PublicController {
 
     @GetMapping("/compilations")
     public List<CompilationDto> getCompilations(
-            @RequestParam(required = false) @NotNull Boolean pinned,
+            @RequestParam(required = false, defaultValue = "false") Boolean pinned,
             @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @RequestParam(defaultValue = "10") @Positive Integer size) {
         return publicService.getCompilations(pinned, from, size);
@@ -73,7 +72,8 @@ public class PublicController {
                                                       @RequestParam(defaultValue = "false") Boolean onlyAvailable,
                                                       @RequestParam(required = false) SortType sort,
                                                       @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                      @RequestParam(defaultValue = "10") @Positive Integer size, ServerHttpRequest servletRequest) {
+                                                      @RequestParam(defaultValue = "10") @Positive Integer size,
+                                                      HttpServletRequest servletRequest) {
 
         SearchParametersUsersPublic searchParametersUsersPublic = new SearchParametersUsersPublic(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
         PresentationParameters presentationParameters = new PresentationParameters(sort, from, size);
@@ -82,7 +82,7 @@ public class PublicController {
 
     @GetMapping("/events/{id}")
     public EventFullDto getEventForPublic(@PathVariable @Positive Integer id,
-                                          ServerHttpRequest servletRequest) {
+                                          HttpServletRequest servletRequest) {
 
         return publicService.getEventForPublic(id, servletRequest);
     }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.BadRequestValidationException;
+import ru.practicum.mainservice.exception.ConflictValidationException;
 import ru.practicum.mainservice.mappers.UserMapper;
 import ru.practicum.mainservice.model.user.User;
 import ru.practicum.mainservice.model.user.dto.UserDto;
@@ -27,6 +28,9 @@ public class UserService {
         if ((userDto.getName() == null) || (userDto.getName().isBlank()) || userDto.getEmail() == null
                 || userDto.getEmail().isBlank()) {
             throw new BadRequestValidationException("Переданы некорректные данные для создания user");
+        }
+        if (!userRepository.findAllByEmail(userDto.getEmail()).isEmpty()) {
+            throw new ConflictValidationException("Имейл уже зарегистрирован");
         }
         return UserMapper.toUserDto(userRepository.save(UserMapper.toUser(userDto)));
     }
