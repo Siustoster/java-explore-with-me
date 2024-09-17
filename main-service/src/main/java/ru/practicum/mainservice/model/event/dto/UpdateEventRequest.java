@@ -12,17 +12,17 @@ import jakarta.validation.constraints.Size;
 @ToString
 public class UpdateEventRequest {
     @Size(min = 20, max = 2000)
-    protected String annotation;
-    protected Integer category;
+    private String annotation;
+    private Integer category;
     @Size(min = 20, max = 7000)
-    protected String description;
-    protected String eventDate;
-    protected LocationDto location;
-    protected Boolean paid;
+    private String description;
+    private String eventDate;
+    private LocationDto location;
+    private Boolean paid;
     @PositiveOrZero
-    protected Integer participantLimit;
-    protected Boolean requestModeration;
-    protected String stateAction;
+    private Integer participantLimit;
+    private Boolean requestModeration;
+    private String stateAction;
     @Size(min = 3, max = 120)
-    protected String title;
+    private String title;
 }

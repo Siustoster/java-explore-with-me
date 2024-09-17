@@ -12,12 +12,12 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @ToString
 public class UserDto {
-    protected Integer id;
+    private Integer id;
     @NotBlank
     @Size(min = 2, max = 250)
-    protected String name;
+    private String name;
     @NotBlank
     @Email
     @Size(min = 6, max = 254)
-    protected String email;
+    private String email;
 }

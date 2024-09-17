@@ -20,15 +20,15 @@ public class Compilation {
     @Id
     @Column(name = "COMPILATION_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    private int id;
     @Column(nullable = false)
-    protected String title;
+    private String title;
     @Column(nullable = false)
     @Convert(converter = NumericBooleanConverter.class)
-    protected Boolean pinned;
+    private Boolean pinned;
     @ManyToMany
     @JoinTable(name = "EVENT_COMPILATIONS",
             joinColumns = @JoinColumn(name = "COMPILATION_ID"),
             inverseJoinColumns = @JoinColumn(name = "EVENT_ID"))
-    protected Set<Event> events;
+    private Set<Event> events;
 }

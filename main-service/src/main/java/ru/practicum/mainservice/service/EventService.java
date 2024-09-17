@@ -1,9 +1,9 @@
-package ru.practicum.mainservice.service.entity;
+package ru.practicum.mainservice.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +17,7 @@ import ru.practicum.mainservice.exception.BadRequestValidationException;
 import ru.practicum.mainservice.exception.ConflictValidationException;
 import ru.practicum.mainservice.mappers.EventMapper;
 import ru.practicum.mainservice.mappers.LocationMapper;
+import ru.practicum.mainservice.mappers.UserMapper;
 import ru.practicum.mainservice.model.Constants;
 import ru.practicum.mainservice.model.category.Category;
 import ru.practicum.mainservice.model.enums.AdminStateAction;
@@ -41,15 +42,24 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EventService {
     private final EventRepository eventRepository;
     private final StatClient statsServerClient2;
     private final ObjectMapper objectMapper;
     private final LocationService locationService;
+    private final CategoryService categoryService;
+    private final UserService userService;
 
     @Transactional
-    public EventFullDto save(NewEventDto newEventDto, User initiator, Category category) {
+    public EventFullDto save(int userId, NewEventDto newEventDto) {
+
+        if (LocalDateTime.parse(newEventDto.getEventDate(), Constants.DATE_TIME_FORMAT)
+                .isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestValidationException("Дата события не может быть раньше, чем через два часа от текущего момента");
+        }
+        User initiator = userService.getUser(userId);
+        Category category = categoryService.getCategory(newEventDto.getCategory());
         Location location = locationService.saveLocation(LocationMapper.toLocation(newEventDto.getLocation()));
         return EventMapper.toEventFullDto(eventRepository.save(EventMapper.toEvent(newEventDto, initiator, category, location)));
     }
@@ -65,7 +75,11 @@ public class EventService {
     }
 
     @Transactional
-    public EventFullDto updateByAdmin(int eventId, UpdateEventRequest updateEventRequest, Category category) {
+    public EventFullDto updateByAdmin(int eventId, UpdateEventRequest updateEventRequest) {
+        Category category = null;
+        if (updateEventRequest.getCategory() != null) {
+            category = categoryService.getCategory(updateEventRequest.getCategory());
+        }
         Event updatingEvent = getEvent(eventId);
         if (updateEventRequest.getStateAction() != null) {
             AdminStateAction adminStateAction = AdminStateAction.from(updateEventRequest.getStateAction()).orElseThrow(() ->
@@ -86,7 +100,11 @@ public class EventService {
     }
 
     @Transactional
-    public EventFullDto updateByUser(int userId, int eventId, UpdateEventRequest updateEventRequest, Category category) {
+    public EventFullDto updateByUser(int userId, int eventId, UpdateEventRequest updateEventRequest) {
+        Category category = null;
+        if (updateEventRequest.getCategory() != null) {
+            category = categoryService.getCategory(updateEventRequest.getCategory());
+        }
         Event updatingEvent = getEvent(eventId);
         if (updatingEvent.getInitiator().getId() != userId) {
             throw new BadRequestValidationException("Событие может редактировать только инициатор");
@@ -150,6 +168,7 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public List<EventShortDto> getUserEvents(int userId, int from, int size) {
+        userService.getUser(userId).getId();
         Pageable pageable = PageRequest.of(from / size, size);
         Page<Event> events;
         events = eventRepository.findAllByInitiator_Id(userId, pageable);
@@ -291,6 +310,8 @@ public class EventService {
 
     @Transactional(readOnly = true)
     public EventFullDto getEventOfUserForPrivate(int userId, int eventId) {
+        User user = userService.getUser(userId);
+        UserMapper.toUserDto(user);
         Event event = getEvent(eventId);
         if (event.getInitiator().getId() != userId) {
             throw new ConflictValidationException("Нельзя просматривать чужие события");

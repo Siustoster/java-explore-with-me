@@ -12,20 +12,20 @@ import ru.practicum.mainservice.model.user.dto.UserShortDto;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventFullDto {
-    protected Integer id;
-    protected String annotation;
-    protected CategoryDto category;
-    protected Integer confirmedRequests;
-    protected String createdOn;
-    protected String description;
-    protected String eventDate;
-    protected UserShortDto initiator;
-    protected LocationDto location;
-    protected Boolean paid;
-    protected int participantLimit;
-    protected String publishedOn;
-    protected Boolean requestModeration;
-    protected String state;
-    protected String title;
-    protected int views;
+    private Integer id;
+    private String annotation;
+    private CategoryDto category;
+    private Integer confirmedRequests;
+    private String createdOn;
+    private String description;
+    private String eventDate;
+    private UserShortDto initiator;
+    private LocationDto location;
+    private Boolean paid;
+    private int participantLimit;
+    private String publishedOn;
+    private Boolean requestModeration;
+    private String state;
+    private String title;
+    private int views;
 }

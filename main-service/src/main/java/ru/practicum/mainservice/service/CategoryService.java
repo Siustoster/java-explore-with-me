@@ -1,6 +1,6 @@
-package ru.practicum.mainservice.service.entity;
+package ru.practicum.mainservice.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
@@ -52,6 +52,12 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public Category getCategory(int categoryId) {
         return categoryRepository.getReferenceById(categoryId);
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryDto getCategoryDtoOut(int categoryId) {
+
+        return CategoryMapper.toCategoryDto(categoryRepository.getReferenceById(categoryId));
     }
 
     @Transactional(readOnly = true)

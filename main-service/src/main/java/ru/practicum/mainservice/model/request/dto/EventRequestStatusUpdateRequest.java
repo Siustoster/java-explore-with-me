@@ -17,8 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class EventRequestStatusUpdateRequest {
     @NotEmpty
-    protected List<Integer> requestIds;
+    private List<Integer> requestIds;
     @NotBlank
     @Size(min = 3)
-    protected String status;
+    private String status;
 }

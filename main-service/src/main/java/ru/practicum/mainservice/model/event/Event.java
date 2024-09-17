@@ -23,41 +23,41 @@ public class Event {
     @Id
     @Column(name = "EVENT_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    private int id;
     @Column(nullable = false, length = 2000)
-    protected String annotation;
+    private String annotation;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "CATEGORY_ID")
-    protected Category category;
+    private Category category;
     @Column(name = "CREATED_ON", nullable = false)
-    protected LocalDateTime createdOn;
+    private LocalDateTime createdOn;
     @Column(nullable = false, length = 7000)
-    protected String description;
+    private String description;
     @Column(name = "EVENT_DATE", nullable = false)
-    protected LocalDateTime eventDate;
+    private LocalDateTime eventDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "INITIATOR_ID")
-    protected User initiator;
+    private User initiator;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "LOCATION_ID")
-    protected Location location;
+    private Location location;
     @Column(nullable = false)
     @Convert(converter = NumericBooleanConverter.class)
-    protected Boolean paid;
+    private Boolean paid;
     @Column(name = "PARTICIPANT_LIMIT", nullable = false)
-    protected int participantLimit;
+    private int participantLimit;
     @Column(name = "CONFIRMED_REQUESTS", nullable = false)
-    protected Integer confirmedRequests;
+    private Integer confirmedRequests;
     @Column(name = "PUBLISHED_ON")
-    protected LocalDateTime publishedOn;
+    private LocalDateTime publishedOn;
     @Column(nullable = false)
     @Convert(converter = NumericBooleanConverter.class)
-    protected Boolean requestModeration;
+    private Boolean requestModeration;
     @Enumerated(EnumType.ORDINAL)
-    protected EventState state;
+    private EventState state;
     @Column(nullable = false)
-    protected String title;
+    private String title;
 }

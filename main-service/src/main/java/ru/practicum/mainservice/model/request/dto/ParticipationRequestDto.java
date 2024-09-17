@@ -13,12 +13,12 @@ import jakarta.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParticipationRequestDto {
-    protected Integer id;
+    private Integer id;
     @Positive
-    protected int requester;
-    protected String created;
+    private int requester;
+    private String created;
     @Positive
-    protected int event;
+    private int event;
     @NotBlank
-    protected String status;
+    private String status;
 }

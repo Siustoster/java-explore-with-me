@@ -11,8 +11,8 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @ToString
 public class UserShortDto {
-    protected Integer id;
+    private Integer id;
     @NotBlank
     @Size(min = 5)
-    protected String name;
+    private String name;
 }

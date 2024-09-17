@@ -12,9 +12,9 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDto {
-    protected Integer id;
+    private Integer id;
     @NotBlank
     @Size(min = 1, max = 50)
     @NotBlank
-    protected String name;
+    private String name;
 }

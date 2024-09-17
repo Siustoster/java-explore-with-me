@@ -10,13 +10,13 @@ import ru.practicum.mainservice.model.user.dto.UserShortDto;
 @NoArgsConstructor
 @ToString
 public class EventShortDto {
-    protected Integer id;
-    protected String annotation;
-    protected CategoryDto category;
-    protected Integer confirmedRequests;
-    protected String eventDate;
-    protected UserShortDto initiator;
-    protected Boolean paid;
-    protected String title;
-    protected int views;
+    private Integer id;
+    private String annotation;
+    private CategoryDto category;
+    private Integer confirmedRequests;
+    private String eventDate;
+    private UserShortDto initiator;
+    private Boolean paid;
+    private String title;
+    private int views;
 }

@@ -12,6 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventRequestStatusUpdateResult {
-    protected List<ParticipationRequestDto> confirmedRequests;
-    protected List<ParticipationRequestDto> rejectedRequests;
+    private List<ParticipationRequestDto> confirmedRequests;
+    private List<ParticipationRequestDto> rejectedRequests;
 }

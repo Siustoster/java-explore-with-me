@@ -11,9 +11,9 @@ import java.util.List;
 @Setter
 @ToString
 public class NewCompilationDto {
-    protected Integer id;
-    protected List<Integer> events;
-    protected Boolean pinned;
+    private Integer id;
+    private List<Integer> events;
+    private Boolean pinned;
     @Size(min = 1, max = 50)
-    protected String title;
+    private String title;
 }

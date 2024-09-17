@@ -1,6 +1,6 @@
-package ru.practicum.mainservice.service.entity;
+package ru.practicum.mainservice.service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.mainservice.model.event.Location;
@@ -8,7 +8,7 @@ import ru.practicum.mainservice.repository.LocationRepository;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class LocationService {
     private final LocationRepository locationRepository;
 

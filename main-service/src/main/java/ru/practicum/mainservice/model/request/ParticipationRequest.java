@@ -23,17 +23,17 @@ public class ParticipationRequest {
     @Id
     @Column(name = "REQUEST_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    private int id;
     @Column(nullable = false)
-    protected LocalDateTime created;
+    private LocalDateTime created;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "EVENT_ID")
-    protected Event event;
+    private Event event;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "REQUESTER_ID")
-    protected User requester;
+    private User requester;
     @Enumerated(EnumType.ORDINAL)
-    protected ParticipationRequestStatus status;
+    private ParticipationRequestStatus status;
 }
