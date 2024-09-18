@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explorewme.HitRequestDto;
 import ru.practicum.explorewme.StatDto;
+import ru.practicum.explorewme.statserver.exception.BadRequestValidationException;
 import ru.practicum.explorewme.statserver.service.StatService;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,10 @@ public class ServerController {
                                  @RequestParam(required = false) List<String> uris,
                                  @RequestParam(defaultValue = "false") Boolean unique) {
         log.info("get stats");
+        if (start.isAfter(LocalDateTime.now()))
+            throw new BadRequestValidationException("Дата начала не может быть в будущем");
+        if (end.isBefore(LocalDateTime.now()))
+            throw new BadRequestValidationException("Дата конца не может быть в прошлом");
         return service.getStat(start, end, unique, uris);
     }
 
