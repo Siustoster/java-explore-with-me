@@ -26,10 +26,7 @@ import ru.practicum.mainservice.model.enums.SortType;
 import ru.practicum.mainservice.model.enums.UserStateAction;
 import ru.practicum.mainservice.model.event.Event;
 import ru.practicum.mainservice.model.event.Location;
-import ru.practicum.mainservice.model.event.dto.EventFullDto;
-import ru.practicum.mainservice.model.event.dto.EventShortDto;
-import ru.practicum.mainservice.model.event.dto.NewEventDto;
-import ru.practicum.mainservice.model.event.dto.UpdateEventRequest;
+import ru.practicum.mainservice.model.event.dto.*;
 import ru.practicum.mainservice.model.user.User;
 import ru.practicum.mainservice.repository.EventRepository;
 import ru.practicum.mainservice.searchparams.PresentationParameters;
@@ -371,5 +368,46 @@ public class EventService {
     @Transactional(readOnly = true)
     public Event getEvent(int eventId) {
         return eventRepository.getReferenceById(eventId);
+    }
+
+    @Transactional(readOnly = true)
+    public EventFullDtoWithRating getEventOfUserWithRating(int userId, int eventId) {
+        Event event = getEvent(eventId);
+        if (event.getInitiator().getId() != userId) {
+            throw new ConflictValidationException("Нельзя просматривать чужие события");
+        }
+        List<String> urisInList = new ArrayList<>();
+        urisInList.add("/events/" + eventId);
+        String[] uris = urisInList.toArray(new String[0]);
+        Map<Integer, Integer> statistic = getHitsStatistic(uris);
+        EventFullDtoWithRating eventFullDtoWithRating = EventMapper.toEventFullDtoWithRating(event);
+        if (statistic.get(eventFullDtoWithRating.getId()) != null) {
+            eventFullDtoWithRating.setViews(statistic.get(eventFullDtoWithRating.getId()));
+        }
+        return eventFullDtoWithRating;
+    }
+
+    @Transactional(readOnly = true)
+    public List<EventShortDtoWithRating> getEventsWithRating(int userId, int from, int size) {
+        User user = userService.getUser(userId);
+        Pageable pageable = PageRequest.of(from / size, size);
+        Page<Event> events;
+        events = eventRepository.findAllWhereRatingNotEqualToZeroSortByRatingDesc(pageable);
+        List<EventShortDtoWithRating> shortEventsDtoWithRating = events
+                .stream()
+                .map(EventMapper::toEventShortDtoWithRating)
+                .collect(Collectors.toList());
+        List<String> urisInList = new ArrayList<>();
+        for (EventShortDtoWithRating event : shortEventsDtoWithRating) {
+            urisInList.add("/events/" + event.getId());
+        }
+        String[] uris = urisInList.toArray(new String[0]);
+        Map<Integer, Integer> statistic = getHitsStatistic(uris);
+        for (EventShortDtoWithRating eventShotDtoWithRating : shortEventsDtoWithRating) {
+            if (statistic.get(eventShotDtoWithRating.getId()) != null) {
+                eventShotDtoWithRating.setViews(statistic.get(eventShotDtoWithRating.getId()));
+            }
+        }
+        return shortEventsDtoWithRating;
     }
 }
