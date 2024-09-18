@@ -13,7 +13,41 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              ""
+              "const main = async () => {\r",
+              "    const api = new API(pm);\r",
+              "    const rnd = new RandomUtils();\r",
+              "\r",
+              "    try {\r",
+              "        const user = await api.addUser(rnd.getUser());\r",
+              "        const category = await api.addCategory(rnd.getCategory());\r",
+              "        let eventBody = rnd.getEvent(category.id);\r",
+              "        eventBody['requestModeration'] = false\r",
+              "        let event = await api.addEvent(user.id, eventBody);\r",
+              "        event = await api.publishEvent(event.id);\r",
+              "        const submittedUser = await api.addUser(rnd.getUser());\r",
+              "        await api.publishParticipationRequest(event.id,submittedUser.id);\r",
+              "        pm.collectionVariables.set('uid',submittedUser.id);\r",
+              "        pm.collectionVariables.set('eid',event.id);\r",
+              "    } catch(err) {\r",
+              "        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "const interval = setInterval(() => {}, 1000);\r",
+              "\r",
+              "setTimeout(async () => \r",
+              "    {\r",
+              "        try {\r",
+              "            // выполняем наш скрипт\r",
+              "            await main();\r",
+              "        } catch (e) {\r",
+              "            console.error(e);\r",
+              "        } finally {\r",
+              "            clearInterval(interval);\r",
+              "        }\r",
+              "    },  \r",
+              "    100 \r",
+              ");"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -36,7 +70,7 @@
         "method": "PUT",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/users/104/events/86/likes?score=true",
+          "raw": "http://localhost:8080/users/:userId/events/:eid/likes?score=true",
           "protocol": "http",
           "host": [
             "localhost"
@@ -44,15 +78,25 @@
           "port": "8080",
           "path": [
             "users",
-            "104",
+            ":userId",
             "events",
-            "86",
+            ":eid",
             "likes"
           ],
           "query": [
             {
               "key": "score",
               "value": "true"
+            }
+          ],
+          "variable": [
+            {
+              "key": "userId",
+              "value": "{{uid}}"
+            },
+            {
+              "key": "eid",
+              "value": "{{eid}}"
             }
           ]
         }
@@ -66,7 +110,41 @@
           "listen": "prerequest",
           "script": {
             "exec": [
-              ""
+              "const main = async () => {\r",
+              "    const api = new API(pm);\r",
+              "    const rnd = new RandomUtils();\r",
+              "\r",
+              "    try {\r",
+              "        const user = await api.addUser(rnd.getUser());\r",
+              "        const category = await api.addCategory(rnd.getCategory());\r",
+              "        let eventBody = rnd.getEvent(category.id);\r",
+              "        eventBody['requestModeration'] = false\r",
+              "        let event = await api.addEvent(user.id, eventBody);\r",
+              "        event = await api.publishEvent(event.id);\r",
+              "        const submittedUser = await api.addUser(rnd.getUser());\r",
+              "        await api.publishParticipationRequest(event.id,submittedUser.id);\r",
+              "        pm.collectionVariables.set('uid',user.id);\r",
+              "        pm.collectionVariables.set('eid',event.id);\r",
+              "    } catch(err) {\r",
+              "        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+              "    }\r",
+              "};\r",
+              "\r",
+              "const interval = setInterval(() => {}, 1000);\r",
+              "\r",
+              "setTimeout(async () => \r",
+              "    {\r",
+              "        try {\r",
+              "            // выполняем наш скрипт\r",
+              "            await main();\r",
+              "        } catch (e) {\r",
+              "            console.error(e);\r",
+              "        } finally {\r",
+              "            clearInterval(interval);\r",
+              "        }\r",
+              "    },  \r",
+              "    100 \r",
+              ");"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -91,7 +169,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/users/103/events/86/rating",
+          "raw": "http://localhost:8080/users/:uid/events/:eid/rating",
           "protocol": "http",
           "host": [
             "localhost"
@@ -99,10 +177,20 @@
           "port": "8080",
           "path": [
             "users",
-            "103",
+            ":uid",
             "events",
-            "86",
+            ":eid",
             "rating"
+          ],
+          "variable": [
+            {
+              "key": "uid",
+              "value": "{{uid}}"
+            },
+            {
+              "key": "eid",
+              "value": "{{eid}}"
+            }
           ]
         }
       },
