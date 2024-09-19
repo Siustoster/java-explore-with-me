@@ -1,4 +1,4 @@
-package ru.practicum.mainservice.model.mark;
+package ru.practicum.mainservice.model.rate;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
@@ -16,20 +16,20 @@ import ru.practicum.mainservice.model.user.User;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Mark {
+public class Rate {
     @Id
     @Column(name = "MARK_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected int id;
+    private int id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "EVALUATOR_ID")
-    protected User evaluator;
+    private User evaluator;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "EVENT_ID")
-    protected Event event;
+    private Event event;
     @Column(nullable = false)
     @Convert(converter = NumericBooleanConverter.class)
-    protected Boolean score;
+    private Boolean score;
 }

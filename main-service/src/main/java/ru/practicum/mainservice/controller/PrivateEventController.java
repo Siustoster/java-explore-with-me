@@ -13,7 +13,7 @@ import ru.practicum.mainservice.model.request.dto.EventRequestStatusUpdateReques
 import ru.practicum.mainservice.model.request.dto.EventRequestStatusUpdateResult;
 import ru.practicum.mainservice.model.request.dto.ParticipationRequestDto;
 import ru.practicum.mainservice.service.EventService;
-import ru.practicum.mainservice.service.MarkService;
+import ru.practicum.mainservice.service.RateService;
 import ru.practicum.mainservice.service.ParticipationRequestService;
 
 
@@ -26,7 +26,7 @@ import java.util.List;
 public class PrivateEventController {
     private final EventService eventService;
     private final ParticipationRequestService participationRequestService;
-    private final MarkService markService;
+    private final RateService rateService;
 
     @GetMapping("/events")
     public List<EventShortDto> getUserEvents(@PathVariable @Positive Integer userId,
@@ -84,7 +84,7 @@ public class PrivateEventController {
                         @PathVariable @Positive Integer eventId,
                         @RequestParam @NotNull Boolean score) {
         log.info("Запрос от private контроллера от пользователя с id={} на добавление реакции по событию с id={}", userId, eventId);
-        markService.putMark(userId, eventId, score);
+        rateService.putMark(userId, eventId, score);
     }
 
     @DeleteMapping("/events/{eventId}/likes")
@@ -92,7 +92,7 @@ public class PrivateEventController {
     public void deleteMark(@PathVariable @Positive Integer userId,
                            @PathVariable @Positive Integer eventId) {
         log.info("Запрос от private контроллера от пользователя с id={} на удаление реакции по событию с id={}", userId, eventId);
-        markService.deleteMark(userId, eventId);
+        rateService.deleteMark(userId, eventId);
     }
 
     @GetMapping("/events/{eventId}/rating")
