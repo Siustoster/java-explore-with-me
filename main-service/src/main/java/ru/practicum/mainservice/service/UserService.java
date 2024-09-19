@@ -12,6 +12,7 @@ import ru.practicum.mainservice.exception.ConflictValidationException;
 import ru.practicum.mainservice.mappers.UserMapper;
 import ru.practicum.mainservice.model.user.User;
 import ru.practicum.mainservice.model.user.dto.UserDto;
+import ru.practicum.mainservice.model.user.dto.UserDtoWithRating;
 import ru.practicum.mainservice.repository.UserRepository;
 
 import java.util.List;
@@ -59,5 +60,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUser(int userId) {
         return userRepository.getReferenceById(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDtoWithRating> getUsersWithRating(int from, int size) {
+        Pageable pageable = PageRequest.of(from / size, size);
+        Page<User> users;
+        users = userRepository.findAllWhereRatingNotEqualToZeroSortByRating(pageable);
+        return users.stream()
+                .map(UserMapper::toUserDtoWithRating)
+                .collect(Collectors.toList());
     }
 }

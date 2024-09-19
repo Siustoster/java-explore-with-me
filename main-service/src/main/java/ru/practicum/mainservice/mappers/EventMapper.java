@@ -5,9 +5,7 @@ import ru.practicum.mainservice.model.category.Category;
 import ru.practicum.mainservice.model.enums.EventState;
 import ru.practicum.mainservice.model.event.Event;
 import ru.practicum.mainservice.model.event.Location;
-import ru.practicum.mainservice.model.event.dto.EventFullDto;
-import ru.practicum.mainservice.model.event.dto.EventShortDto;
-import ru.practicum.mainservice.model.event.dto.NewEventDto;
+import ru.practicum.mainservice.model.event.dto.*;
 import ru.practicum.mainservice.model.user.User;
 
 import java.time.LocalDateTime;
@@ -29,7 +27,8 @@ public class EventMapper {
                 LocalDateTime.now(),
                 newEventDto.getRequestModeration() != null ? newEventDto.getRequestModeration() : true,
                 EventState.PENDING,
-                newEventDto.getTitle() != null ? newEventDto.getTitle() : ""
+                newEventDto.getTitle() != null ? newEventDto.getTitle() : "",
+                0
         );
     }
 
@@ -79,6 +78,43 @@ public class EventMapper {
                 event.getPaid(),
                 event.getTitle(),
                 0
+        );
+    }
+
+    public static EventFullDtoWithRating toEventFullDtoWithRating(Event event) {
+        return new EventFullDtoWithRating(
+                event.getId(),
+                event.getAnnotation(),
+                CategoryMapper.toCategoryDto(event.getCategory()),
+                event.getConfirmedRequests(),
+                event.getCreatedOn().format(Constants.DATE_TIME_FORMAT),
+                event.getDescription(),
+                event.getEventDate().format(Constants.DATE_TIME_FORMAT),
+                UserMapper.toUserShortDtoWithRating(event.getInitiator()),
+                LocationMapper.toLocationDto(event.getLocation()),
+                event.getPaid(),
+                event.getParticipantLimit(),
+                event.getPublishedOn().format(Constants.DATE_TIME_FORMAT),
+                event.getRequestModeration(),
+                event.getState().toString(),
+                event.getTitle(),
+                0,
+                event.getRating()
+        );
+    }
+
+    public static EventShortDtoWithRating toEventShortDtoWithRating(Event event) {
+        return new EventShortDtoWithRating(
+                event.getId(),
+                event.getAnnotation(),
+                CategoryMapper.toCategoryDto(event.getCategory()),
+                event.getConfirmedRequests(),
+                event.getEventDate().format(Constants.DATE_TIME_FORMAT),
+                UserMapper.toUserShortDtoWithRating(event.getInitiator()),
+                event.getPaid(),
+                event.getTitle(),
+                0,
+                event.getRating()
         );
     }
 }

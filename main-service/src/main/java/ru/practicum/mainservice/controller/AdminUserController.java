@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.mainservice.model.user.dto.UserDto;
+import ru.practicum.mainservice.model.user.dto.UserDtoWithRating;
 import ru.practicum.mainservice.service.UserService;
 
 import java.util.List;
@@ -39,5 +40,13 @@ public class AdminUserController {
     public void deleteUser(@PathVariable @Positive Integer userId) {
         log.info("Контроллер админа получил запрос на удаление пользователя с id = {}", userId);
         userService.deleteUser(userId);
+    }
+
+    @GetMapping("/users/rating")
+    public List<UserDtoWithRating> getUsersWithRating(@RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                                      @RequestParam(defaultValue = "10") @Positive Integer size) {
+        log.info("Контроллер админа получил запрос на получение списка пользователей с информацией " +
+                "об их рейтинге и сортировкой по возрастанию рейтинга");
+        return userService.getUsersWithRating(from, size);
     }
 }
